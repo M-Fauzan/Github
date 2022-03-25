@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dicoding.fauzan.github.BuildConfig
 import com.dicoding.fauzan.github.data.FollowerResponse
 import com.dicoding.fauzan.github.data.FollowerResponseItem
 import com.dicoding.fauzan.github.service.RetrofitConfig
@@ -31,7 +32,7 @@ class FollowerViewModel : ViewModel() {
      */
     fun listFollowers(username: String) {
         _isLoading.value = true
-        val client = RetrofitConfig.getUserService().listFollowers(username)
+        val client = RetrofitConfig.getUserService().listFollowers(BuildConfig.TOKEN_KEY, username)
 
         client.enqueue(object : Callback<List<FollowerResponseItem>>{
             override fun onResponse(
@@ -56,7 +57,7 @@ class FollowerViewModel : ViewModel() {
     }
     fun listFollowing(username: String) {
         _isLoading.value = true
-        val client = RetrofitConfig.getUserService().listFollowing(username)
+        val client = RetrofitConfig.getUserService().listFollowing(BuildConfig.TOKEN_KEY,username)
         client.enqueue(object : Callback<List<FollowerResponseItem>>{
             override fun onResponse(
                 call: Call<List<FollowerResponseItem>>,

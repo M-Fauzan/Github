@@ -2,6 +2,7 @@ package com.dicoding.fauzan.github
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -73,7 +74,18 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
+
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_settings -> {
+                val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(settingsIntent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

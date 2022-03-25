@@ -4,6 +4,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.fauzan.github.data.ItemsItem
@@ -18,7 +20,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) : RecyclerView.Adapter<ListSearchAdapter.ListViewHolder>() {
+class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) :
+    ListAdapter<User, ListSearchAdapter.ListViewHolder>(DIFFUTIL_CALLBACK) {
 
     private val userModel = ArrayList<User>()
     class ListViewHolder(val binding: ItemRowUserBinding) : RecyclerView.ViewHolder(binding.root)
@@ -30,7 +33,7 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) : RecyclerVi
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val (login, url, avatarUrl) = userList[position]
-        val client = RetrofitConfig.getUserService().examine(login)
+        val client = RetrofitConfig.getUserService().examine(BuildConfig.TOKEN_KEY, login)
         runBlocking {
             launch(Dispatchers.IO) {
                 client.enqueue(object : Callback<UserDetailResponse> {
@@ -50,9 +53,11 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) : RecyclerVi
                                     responseBody.publicRepos.toString(),
                                     responseBody.company ?: noInput,
                                     responseBody.followers.toString(),
-                                    responseBody.following.toString()
+                                    responseBody.following.toString(),
+                                    false
                                 )
                             )
+
                             userModel.sortBy {it.username }
                         }
                     }
@@ -86,4 +91,15 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) : RecyclerVi
 
     override fun getItemCount(): Int = userList.size
 
+    companion object {
+        val DIFFUTIL_CALLBACK = object : DiffUtil.ItemCallback<User>() {
+            override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+                return oldItem.username == newItem.username
+            }
+
+            override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }

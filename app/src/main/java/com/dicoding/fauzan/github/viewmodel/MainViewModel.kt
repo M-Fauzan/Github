@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.dicoding.fauzan.github.BuildConfig
 import com.dicoding.fauzan.github.data.ItemsItem
 import com.dicoding.fauzan.github.data.UserSearchResponse
 import com.dicoding.fauzan.github.datastore.Settings
@@ -23,7 +24,7 @@ class MainViewModel(private val settings: Settings) : ViewModel() {
 
     fun search(username: String) {
         _isLoading.value = true
-        val client = RetrofitConfig.getUserService().search(username)
+        val client = RetrofitConfig.getUserService().search(BuildConfig.TOKEN_KEY, username)
         client.enqueue(object : Callback<UserSearchResponse> {
             override fun onResponse(
                 call: Call<UserSearchResponse>,
@@ -41,9 +42,4 @@ class MainViewModel(private val settings: Settings) : ViewModel() {
         })
     }
 
-    fun getTheme(): LiveData<Boolean> = settings.getTheme().asLiveData()
-
-    suspend fun setTheme(isInDarkMode: Boolean) {
-        settings.setTheme(isInDarkMode)
-    }
 }

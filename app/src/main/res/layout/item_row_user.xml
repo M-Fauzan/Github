@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/img_avatar"
+        android:contentDescription="Profile Image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -52,6 +53,7 @@
     <ImageView
         android:id="@+id/img_followers"
         android:src="@drawable/ic_baseline_favorite_border_24"
+        android:contentDescription="Followers"
         android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
