@@ -29,10 +29,10 @@ class DetailActivity : AppCompatActivity() {
             tvDetailName.text = user.name
             tvDetailUsername.text = usernameText
             tvDetailLocation.text = user.location
-            tvDetailRepository.text = user.repository
+            tvDetailRepository.text = user.repository.toString()
             tvDetailCompany.text = user.company
-            tvDetailFollowers.text = user.followers
-            tvDetailFollowing.text = user.following
+            tvDetailFollowers.text = user.followers.toString()
+            tvDetailFollowing.text = user.following.toString()
         }
         val userStateAdapter = UserStateAdapter(this)
         userStateAdapter.username = user.username

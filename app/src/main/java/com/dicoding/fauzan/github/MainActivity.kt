@@ -5,39 +5,40 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.fauzan.github.data.ItemsItem
 import com.dicoding.fauzan.github.databinding.ActivityMainBinding
 import com.dicoding.fauzan.github.datastore.Settings
 import com.dicoding.fauzan.github.viewmodel.MainViewModel
+import com.dicoding.fauzan.github.viewmodel.SettingsViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val Context.dataStore by preferencesDataStore(name = "settings")
-    private lateinit var viewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
+
+    private lateinit var listSearchAdapter: ListSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val settings = Settings.getInstance(dataStore)
-        viewModel = ViewModelProvider(this, ViewModelFactory(settings!!)).get(MainViewModel::class.java)
-        binding.rvMainUser.layoutManager = LinearLayoutManager(this)
+        val settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settings!!)).get(
+            SettingsViewModel::class.java)
 
 
+        val repository = UserRepository.getInstance()
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
+        /*
         viewModel.userList.observe(this, { list ->
             binding.rvMainUser.adapter = ListSearchAdapter(list as ArrayList<ItemsItem>)
         })
@@ -50,8 +51,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.rvMainUser.setHasFixedSize(true)
 
+         */
+        val listSearchAdapter = ListSearchAdapter {
+
+        }
+        listSearchAdapter.submitList(ArrayList<User>())
+        binding.rvMainUser.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            setHasFixedSize(false)
+            adapter = listSearchAdapter
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,7 +74,27 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    viewModel.search(query)
+                    mainViewModel.search(query).observe(this@MainActivity, { result ->
+                        when (result) {
+                            is Result.Loading -> {
+                                binding.pbMain.visibility = View.VISIBLE
+                            }
+                            is Result.Success -> {
+                                binding.pbMain.visibility = View.GONE
+                                listSearchAdapter.submitList(result.data)
+
+
+                            }
+                            is Result.Error -> {
+                                binding.pbMain.visibility = View.GONE
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    result.error,
+                                    Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    })
                 }
                 searchView.clearFocus()
                 return true

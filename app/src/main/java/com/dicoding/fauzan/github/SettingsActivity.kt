@@ -20,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val settings = Settings.getInstance(datastore)!!
-        settingsViewModel = ViewModelProvider(this, ViewModelFactory(settings))
+        settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settings))
             .get(SettingsViewModel::class.java)
 
         binding.switchSettingsDarkMode.setOnCheckedChangeListener { _, isChecked ->

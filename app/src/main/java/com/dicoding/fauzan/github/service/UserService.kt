@@ -10,12 +10,12 @@ import retrofit2.http.*
 
 interface UserService {
     @GET("search/users")
-    fun search(@Header("Authorization") authorization: String,
-               @Query("q") username: String) : Call<UserSearchResponse>
+    suspend fun search(@Header("Authorization") authorization: String,
+               @Query("q") username: String) : UserSearchResponse
 
     @GET("users/{username}")
-    fun examine(@Header("Authorization") authorization: String,
-                @Path("username") username: String) : Call<UserDetailResponse>
+    suspend fun examine(@Header("Authorization") authorization: String,
+                @Path("username") username: String) : UserDetailResponse
 
     @GET("users/{username}/followers")
     fun listFollowers(@Header("Authorization") authorization: String,

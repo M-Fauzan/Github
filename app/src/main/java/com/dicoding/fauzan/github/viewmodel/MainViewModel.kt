@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.dicoding.fauzan.github.BuildConfig
+import com.dicoding.fauzan.github.UserRepository
 import com.dicoding.fauzan.github.data.ItemsItem
 import com.dicoding.fauzan.github.data.UserSearchResponse
 import com.dicoding.fauzan.github.datastore.Settings
@@ -15,14 +16,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel(private val settings: Settings) : ViewModel() {
+class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
+
+    /*
     private var _userList = MutableLiveData<List<ItemsItem>>()
     val userList : LiveData<List<ItemsItem>> = _userList
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
-
-    fun search(username: String) {
+    */
+    fun search(username: String) = userRepository.search(username)
+        /*
         _isLoading.value = true
         val client = RetrofitConfig.getUserService().search(BuildConfig.TOKEN_KEY, username)
         client.enqueue(object : Callback<UserSearchResponse> {
@@ -40,6 +44,8 @@ class MainViewModel(private val settings: Settings) : ViewModel() {
                 _isLoading.value = false
             }
         })
-    }
+
+         */
+
 
 }

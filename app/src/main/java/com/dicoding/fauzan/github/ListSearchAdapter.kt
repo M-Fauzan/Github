@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dicoding.fauzan.github.data.ItemsItem
 import com.dicoding.fauzan.github.data.UserDetailResponse
 import com.dicoding.fauzan.github.databinding.ItemRowUserBinding
 import com.dicoding.fauzan.github.service.RetrofitConfig
@@ -20,11 +19,27 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) :
+class ListSearchAdapter(private val onFavoriteClick: (User) -> Unit) :
     ListAdapter<User, ListSearchAdapter.ListViewHolder>(DIFFUTIL_CALLBACK) {
 
-    private val userModel = ArrayList<User>()
-    class ListViewHolder(val binding: ItemRowUserBinding) : RecyclerView.ViewHolder(binding.root)
+    // private val userModel = ArrayList<User>()
+    class ListViewHolder(val binding: ItemRowUserBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(user: User) {
+            binding.tvUsername.text = user.username
+            Glide.with(itemView.context)
+                .load(user.avatar)
+                .circleCrop()
+                .placeholder(android.R.drawable.menuitem_background)
+                .error(android.R.drawable.stat_notify_error)
+                .timeout(5000)
+                .into(binding.imgAvatar)
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_KEY, user)
+                itemView.context.startActivity(intent)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = ItemRowUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -32,6 +47,13 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) :
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        val user = getItem(position)
+        holder.bind(user)
+        holder.binding.imgFollowers.setOnClickListener {
+            onFavoriteClick(user)
+        }
+
+        /*
         val (login, url, avatarUrl) = userList[position]
         val client = RetrofitConfig.getUserService().examine(BuildConfig.TOKEN_KEY, login)
         runBlocking {
@@ -54,7 +76,6 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) :
                                     responseBody.company ?: noInput,
                                     responseBody.followers.toString(),
                                     responseBody.following.toString(),
-                                    false
                                 )
                             )
 
@@ -87,9 +108,11 @@ class ListSearchAdapter(private val userList: ArrayList<ItemsItem>) :
             intent.putExtra(DetailActivity.EXTRA_KEY, userModel[holder.adapterPosition])
             holder.itemView.context.startActivity(intent)
         }
+
+         */
     }
 
-    override fun getItemCount(): Int = userList.size
+    // override fun getItemCount(): Int = userList.size
 
     companion object {
         val DIFFUTIL_CALLBACK = object : DiffUtil.ItemCallback<User>() {
