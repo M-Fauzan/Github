@@ -1,4 +1,4 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.adapter
 
 import android.os.Bundle
 import android.util.Log

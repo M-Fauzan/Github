@@ -1,4 +1,4 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,13 +13,13 @@ class ListFollowerAdapter(var list: List<FollowerResponseItem>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ListFollowerAdapter.ViewHolder {
+    ): ViewHolder {
         return ViewHolder(
             ItemRowFollowerBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: ListFollowerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvFollowerUsername.text = list[position].login
         Glide.with(holder.itemView.context)
             .load(list[position].avatarUrl)

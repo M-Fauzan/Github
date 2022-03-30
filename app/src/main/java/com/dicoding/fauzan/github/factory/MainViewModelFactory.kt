@@ -1,7 +1,10 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.factory
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.dicoding.fauzan.github.Injection
+import com.dicoding.fauzan.github.room.UserRepository
 import com.dicoding.fauzan.github.viewmodel.MainViewModel
 
 class MainViewModelFactory(private val repository: UserRepository) :
@@ -12,5 +15,16 @@ class MainViewModelFactory(private val repository: UserRepository) :
             return MainViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
+    companion object {
+        @Volatile
+        private var instance: MainViewModelFactory? = null
+
+        fun getInstance(context: Context): MainViewModelFactory {
+            return instance ?: synchronized(this) {
+                instance ?: MainViewModelFactory(Injection.provideRepository(context))
+            }
+        }
     }
 }

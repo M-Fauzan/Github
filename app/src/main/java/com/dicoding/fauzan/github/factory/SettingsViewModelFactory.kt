@@ -1,9 +1,8 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.fauzan.github.datastore.Settings
-import com.dicoding.fauzan.github.viewmodel.MainViewModel
 import com.dicoding.fauzan.github.viewmodel.SettingsViewModel
 import java.lang.IllegalArgumentException
 

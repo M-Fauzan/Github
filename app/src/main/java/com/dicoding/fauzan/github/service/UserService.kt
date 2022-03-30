@@ -1,8 +1,6 @@
 package com.dicoding.fauzan.github.service
 
-import com.dicoding.fauzan.github.BuildConfig
 import com.dicoding.fauzan.github.data.FollowerResponseItem
-import com.dicoding.fauzan.github.data.ItemsItem
 import com.dicoding.fauzan.github.data.UserDetailResponse
 import com.dicoding.fauzan.github.data.UserSearchResponse
 import retrofit2.Call

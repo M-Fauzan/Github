@@ -1,6 +1,7 @@
 package com.dicoding.fauzan.github
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -24,9 +25,9 @@ data class User(
     var followers: Int,
 
     var following: Int,
-    /*
-    @ColumnInfo(name = "favorited")
-    var isFavorited: Boolean
 
-     */
+    @ColumnInfo(name = "favorite")
+    var isFavorite: Boolean
+
+
 ): Parcelable

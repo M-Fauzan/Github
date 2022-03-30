@@ -12,13 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Github">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activity.FavoriteActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailActivity"
+            android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

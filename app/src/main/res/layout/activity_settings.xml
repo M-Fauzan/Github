@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".SettingsActivity">
+    tools:context=".activity.SettingsActivity">
 
     <TextView
         android:id="@+id/tv_settings_theme_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Theme"
+        android:text="@string/theme"
         android:textSize="18sp"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -22,7 +22,7 @@
         android:id="@+id/tv_settings_dark_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable dark mode"
+        android:text="@string/theme_settings_1"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/switch_settings_dark_mode"

@@ -1,4 +1,4 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.activity
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.fauzan.github.databinding.ActivitySettingsBinding
 import com.dicoding.fauzan.github.datastore.Settings
+import com.dicoding.fauzan.github.factory.SettingsViewModelFactory
 import com.dicoding.fauzan.github.viewmodel.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {

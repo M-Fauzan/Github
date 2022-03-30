@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".DetailActivity">
+        tools:context=".activity.DetailActivity">
         <ImageView
             android:id="@+id/img_user_avatar"
             android:layout_width="200dp"
@@ -108,12 +108,12 @@
         <TextView
             android:id="@+id/tv_detail_company_text"
             style="@style/UserText.Detail"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:layout_marginStart="8dp"
             android:gravity="center"
-            app:layout_constraintEnd_toEndOf="@id/tv_detail_repository_text"
+            app:layout_constraintEnd_toStartOf="@id/tv_detail_company"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_followers_text"
+            app:layout_constraintTop_toTopOf="@id/tv_detail_company"
             android:text="@string/company"
             />
 
@@ -122,8 +122,9 @@
             style="@style/UserText.Detail.StringValue"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_detail_company_text"
+            app:layout_constraintStart_toStartOf="@id/img_user_avatar"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_followers_text"
             tools:text="@tools:sample/lorem"
             />
@@ -131,10 +132,11 @@
             android:id="@+id/tv_detail_location_text"
             style="@style/UserText.Detail"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
             android:gravity="center"
-            app:layout_constraintEnd_toEndOf="@id/tv_detail_repository_text"
+            app:layout_constraintEnd_toStartOf="@id/tv_detail_location"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_company_text"
+            app:layout_constraintTop_toTopOf="@id/tv_detail_location"
             android:text="@string/location"
             />
         <TextView
@@ -142,7 +144,7 @@
             style="@style/UserText.Detail.StringValue"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_detail_location_text"
+            app:layout_constraintStart_toStartOf="@id/img_user_avatar"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_company"
             tools:text="@tools:sample/lorem"
             />

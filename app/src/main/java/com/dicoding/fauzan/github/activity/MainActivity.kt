@@ -1,67 +1,56 @@
-package com.dicoding.fauzan.github
+package com.dicoding.fauzan.github.activity
 
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.fauzan.github.adapter.ListSearchAdapter
+import com.dicoding.fauzan.github.R
+import com.dicoding.fauzan.github.Result
 import com.dicoding.fauzan.github.databinding.ActivityMainBinding
 import com.dicoding.fauzan.github.datastore.Settings
+import com.dicoding.fauzan.github.factory.MainViewModelFactory
+import com.dicoding.fauzan.github.factory.SettingsViewModelFactory
 import com.dicoding.fauzan.github.viewmodel.MainViewModel
 import com.dicoding.fauzan.github.viewmodel.SettingsViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val Context.dataStore by preferencesDataStore(name = "settings")
+    private val Context.datastore by preferencesDataStore(name = "settings")
     private lateinit var mainViewModel: MainViewModel
-
-    private lateinit var listSearchAdapter: ListSearchAdapter
+    private lateinit var settingsViewModel: SettingsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val settings = Settings.getInstance(dataStore)
-        val settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settings!!)).get(
-            SettingsViewModel::class.java)
 
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory.getInstance(this))
+            .get(MainViewModel::class.java)
 
-        val repository = UserRepository.getInstance()
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
-        /*
-        viewModel.userList.observe(this, { list ->
-            binding.rvMainUser.adapter = ListSearchAdapter(list as ArrayList<ItemsItem>)
-        })
+        val settings = Settings.getInstance(datastore)!!
+        settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settings))
+            .get(SettingsViewModel::class.java)
 
-        viewModel.isLoading.observe(this, { isLoading ->
-            binding.pbMain.visibility = if (isLoading) {
-                View.VISIBLE
+        settingsViewModel.getTheme().observe(this, { isInDarkMode ->
+            if (isInDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
-                View.INVISIBLE
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         })
-
-
-         */
-        val listSearchAdapter = ListSearchAdapter {
-
-        }
-        listSearchAdapter.submitList(ArrayList<User>())
-        binding.rvMainUser.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            setHasFixedSize(false)
-            adapter = listSearchAdapter
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -78,11 +67,26 @@ class MainActivity : AppCompatActivity() {
                         when (result) {
                             is Result.Loading -> {
                                 binding.pbMain.visibility = View.VISIBLE
+                                binding.rvMainUser.visibility = View.GONE
                             }
                             is Result.Success -> {
                                 binding.pbMain.visibility = View.GONE
+                                binding.rvMainUser.visibility = View.VISIBLE
+                                Log.d("MainActivity", result.data.toString())
+                                val listSearchAdapter = ListSearchAdapter { user ->
+                                    if (!user.isFavorite) {
+                                        mainViewModel.insertUser(user)
+                                        Toast.makeText(this@MainActivity,
+                                            "${user.username} telah ditambahkan. Silahkan cek di halaman favorite",
+                                            Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                binding.rvMainUser.apply {
+                                    layoutManager = LinearLayoutManager(this@MainActivity)
+                                    setHasFixedSize(false)
+                                    adapter = listSearchAdapter
+                                }
                                 listSearchAdapter.submitList(result.data)
-
 
                             }
                             is Result.Error -> {
@@ -113,6 +117,10 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_settings -> {
                 val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(settingsIntent)
+            }
+            R.id.menu_favorite -> {
+                val favoriteIntent = Intent(this@MainActivity, FavoriteActivity::class.java)
+                startActivity(favoriteIntent)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -1,9 +1,7 @@
 package com.dicoding.fauzan.github.service
 
 import com.dicoding.fauzan.github.BuildConfig
-import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

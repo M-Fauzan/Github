@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.fauzan.github.BuildConfig
-import com.dicoding.fauzan.github.data.FollowerResponse
 import com.dicoding.fauzan.github.data.FollowerResponseItem
 import com.dicoding.fauzan.github.service.RetrofitConfig
 import retrofit2.Call
@@ -24,12 +23,6 @@ class FollowerViewModel : ViewModel() {
     private val _followingList = MutableLiveData<List<FollowerResponseItem>>()
     val followingList: LiveData<List<FollowerResponseItem>> = _followingList
 
-    /*
-    init {
-        listFollowers("sidiqpermana")
-        listFollowing("sidiqpermana")
-    }
-     */
     fun listFollowers(username: String) {
         _isLoading.value = true
         val client = RetrofitConfig.getUserService().listFollowers(BuildConfig.TOKEN_KEY, username)

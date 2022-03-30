@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.fauzan.github.ListFollowerAdapter
+import com.dicoding.fauzan.github.adapter.ListFollowerAdapter
 import com.dicoding.fauzan.github.databinding.FragmentFollowerBinding
 import com.dicoding.fauzan.github.viewmodel.FollowerViewModel
 
